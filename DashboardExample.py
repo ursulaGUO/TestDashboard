@@ -39,7 +39,6 @@ df = pd.merge(df_volvo, df_market[["Date","Average Market Price"]], on="Date")
 df.drop(columns = ["Car Type","Price"], inplace=True)
 
 
-
 ###########################
 # Sidebar selection options
 ###########################
@@ -66,3 +65,4 @@ df_selected_years
 
 # Plotting a line chart on page
 st.line_chart(data=df_selected_years, x='Date', y=["Volvo Price", "Average Market Price"])
+
