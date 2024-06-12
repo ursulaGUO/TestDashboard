@@ -13,6 +13,7 @@ st.set_page_config(
 alt.themes.enable("dark")
 
 
+
 ###########################
 # Prepping the dataframe
 ###########################
@@ -20,6 +21,7 @@ df = pd.read_csv("VolvoAllUsedTrend.csv")
 
 # Dropping last line which contains irrelevant data
 df.drop(df.tail(1).index,inplace=True) 
+df.drop(columns = ["Avg Price","Last 30 Days", "Last 90 Days", "YoY Change"], inplace=True)
 
 # Extracting year out of date
 df["Date"] = pd.to_datetime(df["Date"])
@@ -34,6 +36,8 @@ df_volvo.drop(columns = ["Average Market Price"],inplace=True)
 df_market = df.dropna(subset = ["Average Market Price"])
 df_market.drop(columns = ["Volvo Price"],inplace=True)
 df = pd.merge(df_volvo, df_market[["Date","Average Market Price"]], on="Date")
+df.drop(columns = ["Car Type","Price"], inplace=True)
+
 
 
 ###########################
