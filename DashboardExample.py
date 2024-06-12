@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
+import plotly.express as px
 
 st.set_page_config(
     page_title="Volvo Price Dashboard",
@@ -35,19 +36,6 @@ df_market = df.dropna(subset = ["Average Market Price"])
 df_market.drop(columns = ["Volvo Price"],inplace=True)
 df = pd.merge(df_volvo, df_market[["Date","Average Market Price"]], on="Date")
 
-###########################
-# Sidebar selection options
-###########################
-'''
-with st.sidebar:
-    st.title('🚕 Volvo Price Dashboard')
-    year_list = list(df.Year.unique())[::-1]
-    selected_year = st.selectbox("Select Year", year_list, index=len(year_list)-1)
-    df_selected_year = df[df.Year == selected_year]
-    df_selected_year_sorted = df_selected_year.sort_values(by="Price", ascending=False)
-    color_theme_list = ['blues','cividis','greens']
-    select_color_theme = st.selectbox("Select a color theme", color_theme_list)
-'''
 
 ###########################
 # Sidebar selection options
@@ -56,13 +44,14 @@ with st.sidebar:
 
 with st.sidebar:
     st.title('🚕 Volvo Price Dashboard')
-    year_list = list(df.Year.unique())[::]
+    year_list = list(df.Year.unique())[::] # in ascending order
     selected_start_year = st.selectbox("Select Start Year", year_list, index=len(year_list)-1)
-    selected_end_year = st.selectbox("Select End Year", year_list, index=len(year_list)-1)
+    end_year_list = list(df.Year.where(df["Year"] >= selected_start_year).unique())
+    selected_end_year = st.selectbox("Select End Year", end_year_list, index=len(end_year_list)-1)
     df_selected_years = df[(df.Year >= selected_start_year) & (df.Year <= selected_end_year)]
     df_selected_years_sorted = df_selected_years.sort_values(by="Price", ascending=False)
-    color_theme_list = ['blues','cividis','greens']
-    select_color_theme = st.selectbox("Select a color theme", color_theme_list)
+    color_theme_list = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
+    #selected_color_theme = st.selectbox('Select a color theme', color_theme_list)
 
 
 # Writing paragraphs on page
