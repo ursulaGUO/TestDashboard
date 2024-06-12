@@ -51,7 +51,6 @@ with st.sidebar:
     end_year_list = list(df.Year.where(df["Year"] >= selected_start_year).unique())
     selected_end_year = st.selectbox("Select End Year", end_year_list, index=len(end_year_list)-1)
     df_selected_years = df[(df.Year >= selected_start_year) & (df.Year <= selected_end_year)]
-    df_selected_years_sorted = df_selected_years.sort_values(by="Price", ascending=False)
     color_theme_list = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
     #selected_color_theme = st.selectbox('Select a color theme', color_theme_list)
 
