@@ -21,7 +21,7 @@ df = pd.read_csv("VolvoAllUsedTrend.csv")
 
 # Dropping last line which contains irrelevant data
 df.drop(df.tail(1).index,inplace=True) 
-df.drop(columns = ["Avg Price","Last 30 Days", "Last 90 Days", "YoY Change"], inplace=True)
+df.drop(columns = ["Avg Price","Last 30 days", "Last 90 days", "YoY Change"], inplace=True)
 
 # Extracting year out of date
 df["Date"] = pd.to_datetime(df["Date"])
