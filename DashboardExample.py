@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
+import plotly.express as px
 
 ###########################
 # Set up webpage information
@@ -29,6 +30,7 @@ df.drop(columns = ["Avg Price","Last 30 days", "Last 90 days", "YoY Change"], in
 # Extracting year out of date
 df["Date"] = pd.to_datetime(df["Date"])
 df["Year"] = df["Date"].dt.year
+df['Month Year'] = df['Date'].dt.to_period('M')
 df_new = pd.DataFrame()
 
 # Creating two seperate columns with different prices
@@ -63,7 +65,6 @@ with st.sidebar:
         color_theme_list = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
 
 
-    
     #selected_color_theme = st.selectbox('Select a color theme', color_theme_list)
 
 
@@ -98,5 +99,9 @@ if pwd == "pwd":
     else: 
         cols = ["Volvo Price"]
 
-    st.line_chart(data=df_selected_years, x='Date', y=cols)
+    fig = px.line(df_selected_years, x='Date', y=cols, 
+              title='Volvo Price vs Average Market Price Over Time')
+    st.plotly_chart(fig)
+
+
 
