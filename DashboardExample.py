@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
+import plotly.express as px
 
 st.set_page_config(
     page_title="Volvo Price Dashboard",
@@ -53,7 +54,7 @@ with st.sidebar:
     else: 
         year_list = list(df.Year.unique())[::] # in ascending order
         selected_start_year = st.selectbox("Select Start Year", year_list, index=len(year_list)-1)
-        end_year_list = list(df.Year.where(df["Year"] >= selected_start_year).unique())
+        end_year_list = list(df.Year.where(df["Year"] >= selected_start_year).unique().astype(int))
         selected_end_year = st.selectbox("Select End Year", end_year_list, index=len(end_year_list)-1)
         df_selected_years = df[(df.Year >= selected_start_year) & (df.Year <= selected_end_year)]
         color_theme_list = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
@@ -62,13 +63,12 @@ with st.sidebar:
     
     #selected_color_theme = st.selectbox('Select a color theme', color_theme_list)
 
-#
 
 # Writing title paragraphs on page
 st.write("""
          # Volvo Sales Trend
          Please enter password (pwd) to verify.
-         
+
          Click to see how Volvo's price has changed over time in the second hand market.""")
 
 # Show table
