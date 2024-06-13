@@ -77,6 +77,7 @@ st.write("""
         Please enter password (pwd) to verify.
 
         Click to see how Volvo's price has changed over time in the second hand market.""")
+st.write("Data obtained from cargurus.com")
 
 if pwd == "pwd":
     # Show table
