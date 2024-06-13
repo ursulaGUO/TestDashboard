@@ -3,6 +3,10 @@ import pandas as pd
 import numpy as np
 import altair as alt
 
+###########################
+# Set up webpage information
+###########################
+
 st.set_page_config(
     page_title="Volvo Price Dashboard",
     page_icon="🚕",
@@ -63,32 +67,36 @@ with st.sidebar:
     #selected_color_theme = st.selectbox('Select a color theme', color_theme_list)
 
 
+###########################
+# Main page
+###########################
 # Writing title paragraphs on page
 st.write("""
-         # Volvo Sales Trend
-         Please enter password (pwd) to verify.
+        # Volvo Sales Trend
+        Please enter password (pwd) to verify.
 
-         Click to see how Volvo's price has changed over time in the second hand market.""")
+        Click to see how Volvo's price has changed over time in the second hand market.""")
 
-# Show table
-df_selected_years
+if pwd == "pwd":
+    # Show table
+    df_selected_years
 
-# Show average price
-st.markdown("#### Average price of Volvo in selected time frame")
-st.markdown(str(int(df_selected_years["Volvo Price"].mean())))
+    # Show average price
+    st.markdown("#### Average price of Volvo in selected time frame")
+    st.markdown(str(int(df_selected_years["Volvo Price"].mean())))
 
 
+    # Plotting a line chart on page
+    st.markdown("#### Trend of price of Volvo in selected time frame")
 
-# Plotting a line chart on page
-st.markdown("#### Trend of price of Volvo in selected time frame")
+    # Add buttons to obtions to select which line to plot
+    market = st.checkbox("Show Market Price")
+    st.write("State of market:",market)
 
-# Add buttons to obtions to select which line to plot
-market = st.checkbox("Show Market Price")
-st.write("State of market:",market)
+    if market == True: 
+        cols = ["Volvo Price", "Average Market Price"]
+    else: 
+        cols = ["Volvo Price"]
 
-if market == True: 
-    cols = ["Volvo Price", "Average Market Price"]
-else: 
-    cols = ["Volvo Price"]
+    st.line_chart(data=df_selected_years, x='Date', y=cols)
 
-st.line_chart(data=df_selected_years, x='Date', y=cols)
