@@ -92,7 +92,6 @@ if pwd == "pwd":
 
     # Add buttons to obtions to select which line to plot
     market = st.checkbox("Show Market Price")
-    st.write("State of market:",market)
 
     if market == True: 
         cols = ["Volvo Price", "Average Market Price"]
