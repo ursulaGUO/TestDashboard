@@ -13,7 +13,6 @@ st.set_page_config(
 alt.themes.enable("dark")
 
 
-
 ###########################
 # Prepping the dataframe
 ###########################
@@ -37,7 +36,8 @@ df_market = df.dropna(subset = ["Average Market Price"])
 df_market.drop(columns = ["Volvo Price"],inplace=True)
 df = pd.merge(df_volvo, df_market[["Date","Average Market Price"]], on="Date")
 df.drop(columns = ["Car Type","Price"], inplace=True)
-
+df["Volvo Price"] = pd.to_numeric(df["Volvo Price"], errors = "coerce")
+df["Average Market Price"] = pd.to_numeric(df["Average Market Price"], errors = "coerce")
 
 ###########################
 # Sidebar selection options
@@ -46,22 +46,48 @@ df.drop(columns = ["Car Type","Price"], inplace=True)
 
 with st.sidebar:
     st.title('🚕 Volvo Price Dashboard')
-    year_list = list(df.Year.unique())[::] # in ascending order
-    selected_start_year = st.selectbox("Select Start Year", year_list, index=len(year_list)-1)
-    end_year_list = list(df.Year.where(df["Year"] >= selected_start_year).unique())
-    selected_end_year = st.selectbox("Select End Year", end_year_list, index=len(end_year_list)-1)
-    df_selected_years = df[(df.Year >= selected_start_year) & (df.Year <= selected_end_year)]
-    color_theme_list = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
+        # Set password
+    pwd = st.sidebar.text_input("Password:", value="", type="password")
+    if pwd != "pwd":
+        df = pd.DataFrame
+    else: 
+        year_list = list(df.Year.unique())[::] # in ascending order
+        selected_start_year = st.selectbox("Select Start Year", year_list, index=len(year_list)-1)
+        end_year_list = list(df.Year.where(df["Year"] >= selected_start_year).unique())
+        selected_end_year = st.selectbox("Select End Year", end_year_list, index=len(end_year_list)-1)
+        df_selected_years = df[(df.Year >= selected_start_year) & (df.Year <= selected_end_year)]
+        color_theme_list = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
+
+
+    
     #selected_color_theme = st.selectbox('Select a color theme', color_theme_list)
 
+#
 
-# Writing paragraphs on page
+# Writing title paragraphs on page
 st.write("""
          # Volvo Sales Trend
          Click to see how Volvo's price has changed over time in the second hand market""")
 
+# Show table
 df_selected_years
 
-# Plotting a line chart on page
-st.line_chart(data=df_selected_years, x='Date', y=["Volvo Price", "Average Market Price"])
+# Show average price
+st.markdown("#### Average Price of Volvo in selected time frame")
+st.markdown(str(int(df_selected_years["Volvo Price"].mean())))
 
+
+
+# Plotting a line chart on page
+st.markdown("#### Trend of Price of Volvo in selected time frame")
+
+# Add buttons to obtions to select which line to plot
+market = st.checkbox("Show Market Price")
+st.write("State of market:",market)
+
+if market == True: 
+    cols = ["Volvo Price", "Average Market Price"]
+else: 
+    cols = ["Volvo Price"]
+    
+st.line_chart(data=df_selected_years, x='Date', y=cols)
